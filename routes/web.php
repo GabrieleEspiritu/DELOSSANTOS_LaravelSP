@@ -1,49 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+// This file defines all the URLs (routes) that users can visit in the application.
 
-// Home Page
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentController;
+
+// Home route - shows the homepage when user visits /
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
-// Student Routes
-Route::group(['prefix' => 'students'], function () {
-    // Student List (Index)
-    Route::get('/', function () {
-        return view('students.index');
-    })->name('students.index');
-    
-    // Add Student Form (Create)
-    Route::get('/create', function () {
-        return view('students.create');
-    })->name('students.create');
-    
-    // Store Student (POST)
-    Route::post('/', function () {
-        // TODO: Add student to database
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
-    })->name('students.store');
-    
-    // View Student Profile (Show)
-    Route::get('/{id}', function ($id) {
-        return view('students.show');
-    })->name('students.show');
-    
-    // Edit Student Form (Edit)
-    Route::get('/{id}/edit', function ($id) {
-        return view('students.edit');
-    })->name('students.edit');
-    
-    // Update Student (PUT)
-    Route::put('/{id}', function ($id) {
-        // TODO: Update student in database
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
-    })->name('students.update');
-    
-    // Delete Student (DELETE)
-    Route::delete('/{id}', function ($id) {
-        // TODO: Delete student from database
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully!');
-    })->name('students.destroy');
-});
+// Shows all students when user visits /students
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+
+// Shows the form to create a new student when user visits /students/create
+Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+
+// Shows details of one student - {id} is the student ID (e.g., /students/1)
+Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
+
+// Shows the form to edit a student - {id} is the student ID (e.g., /students/1/edit)
+Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
